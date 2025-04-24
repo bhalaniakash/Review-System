@@ -31,7 +31,7 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
-Route::post('/feedback', [Feedback_validate::class, 'index'])->name('feedback.submit');  
+Route::post('/feedback', [Feedback_validate::class, 'submit'])->name('feedback.submit');
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
 
 
