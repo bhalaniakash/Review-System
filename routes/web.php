@@ -2,24 +2,26 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Feedback_validate;
 use Illuminate\Support\Facades\Route;
 use App\Models\Feedback;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    if (Auth::check() && Auth::user()->is_admin === 1) {
-        return view('dashboard');
-    }
-    else {
-        return redirect('/')->with('error', 'Unauthorized access');
-    }
+// Route::get('/dashboard', function () {
+//     if (Auth::check() && Auth::user()->is_admin === 1) {
+//         return view('dashboard');
+//     }
+//     else {
+//         return redirect('/')->with('error', 'Unauthorized access');
+//     }
    
-})->middleware(['auth', 'verified'])->name('dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -29,18 +31,14 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
-Route::post('/feedback', function (Request $request) {
-    $validated = $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'nullable|email|max:255',
-        'rating' => 'required|integer|between:1,5',
-        'comment' => 'required|string|max:1000',
-    ]);
-    
-    Feedback::create($validated);
-    
-    return redirect()->back()->with('success', 'Feedback submitted successfully!');
-})->name('feedback.submit');
-
-
+Route::post('/feedback', [Feedback_validate::class, 'index'])->name('feedback.submit');  
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
+
+
+Route::post('/feedbacks/{id}/update-addressed', function (Request $request, $id) {
+    $feedback = Feedback::findOrFail($id);
+    $feedback->addressed = $request->input('addressed');
+    $feedback->save();
+
+    return response()->json(['success' => true, 'addressed' => $feedback->addressed]);
+});

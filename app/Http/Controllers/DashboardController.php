@@ -12,4 +12,14 @@ class DashboardController extends Controller
         $feedbacks = Feedback::all(); 
         return view('dashboard', compact('feedbacks'));
     }   
+    public function Api_index()
+    {
+        $feedbacks = Feedback::all(); 
+        // return view('dashboard', compact('feedbacks'));
+        return $feedbacks;
+    }   
+
+    public function UpdateCheck(Request $request){
+        
+    }
 }

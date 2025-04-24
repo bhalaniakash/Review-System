@@ -148,9 +148,11 @@
                     </div>
                     @csrf
                     <div class="form-group">
-                        <label for="name" class="form-check-label">Name*</label>
+                        <label for="name" class="form-check-label">Name</label>
                         <input type="text" id="name" name="name">
                     </div>
+                    <!-- Removed duplicate session success block -->
+
                     <div class="form-group">
                         <label class="form-check-label">Rating*</label>
                         <div id="starRating" class="flex items-center space-x-1 text-2xl text-gray-300">
@@ -163,14 +165,29 @@
                   
                         <input type="hidden" name="rating" id="rating" required>
                     </div>
+                    @if (session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                    @endif
                     <div class="form-group">
                         <label for="comment" class="form-check-label">Comment*</label>
                         <textarea id="comment" name="comment" rows="3"></textarea>
                     </div>
+                    @if (session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                    @endif
                     <div class="form-group">
                         <label for="email">Email</label>
                         <input type="email" id="email" name="email">
                     </div>
+                    @if (session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                    @endif
                     <button type="submit" class="btn btn-primary">Submit</button>
                     <button id="cancelFeedback" type="button" class="btn btn-secondary">Cancel</button>
                 </form>
@@ -180,6 +197,7 @@
 
 
     <script>
+        
         document.addEventListener('DOMContentLoaded', function() {
             const feedbackButton = document.getElementById('feedbackButton');
             const feedbackModal = document.getElementById('feedbackModal');
@@ -241,4 +259,3 @@
             });
         });
     </script>
-    
